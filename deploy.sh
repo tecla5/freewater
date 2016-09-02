@@ -71,7 +71,7 @@ parse_args() {
 
 	# Source directory & target branch.
   # ${GIT_DEPLOY_DIR:-dist}
-	deploy_directory=${GIT_DEPLOY_DIR:-build/bundled}
+	deploy_directory=${GIT_DEPLOY_DIR:-build/unbundled}
 	deploy_branch=${GIT_DEPLOY_BRANCH:-gh-pages}
 
 	#if no user identity is already set in the current git environment, use this:
