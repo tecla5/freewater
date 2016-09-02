@@ -41,21 +41,19 @@ Polymer({
     usersReady: Boolean,
     marks: {
       type: Array,
-      observer: 'dataChanged'
+      observer: 'loadMarksToMap'
     }
   },
   observers: [
     'loadMarksToMap(marks, usersReady)'
   ],
   ready: function(){
-    console.log('free-water-map');
+    console.log('ready fw-map');
     var self =  this;
 
-    //this.marksdataSource = new Firebase('https://free-water.firebaseio.com/marks');
-    this.marksdataSource = [];
+    this.marksdataSource = firebase.app('fw').database().ref('marks');
 
     // TODO uncomment
-    /*
     this.$$('smart-map').addEventListener('country-changed', this.loadMarks.bind(this));
     this.$$('smart-map').addEventListener('publish', this.publish.bind(this));
     this.$$('smart-map').addEventListener('confirm', function(data){
@@ -65,7 +63,6 @@ Polymer({
     this.$$('smart-map').addEventListener('complaint', function(data){
       self.addOpinion('complaints', data);
     });
-    */
 
     /*
     this.$$('freewater-users').addEventListener('users-ready', function(){
@@ -80,10 +77,10 @@ Polymer({
         var mark = data.detail.mark;
 
         if (userDontHaveOpinion(mark, user.id)){
-          //var marksdataSource = new Firebase('https://free-water.firebaseio.com/marks/' +
-          //  mark.__firebaseKey__);
+          var marksdataSource = firebase.app('fw').database().ref('marks/'+ mark.__firebaseKey__ );
+
           var array = null;
-          //marksdataSource.child(typeOpinion);
+          marksdataSource.child(typeOpinion);
 
           if (!array){
             array = [];
@@ -92,8 +89,8 @@ Polymer({
           array.push(user.id);
           var objectToUpdate = {};
           objectToUpdate[typeOpinion] = array;
-          //TODO: uncomment
-          //marksdataSource.update( objectToUpdate );
+
+          marksdataSource.update( objectToUpdate );
         }
       });
   },
@@ -103,7 +100,6 @@ Polymer({
     console.log('country', country);
     var self = this;
 
-    /* TODO:  uncomment
     this.marksdataSource.orderByChild('country').equalTo(country).on('value', function(snapshot) {
       self.marks = snapshot.val();
 
@@ -115,7 +111,6 @@ Polymer({
         console.log('The read failed: ' + errorObject.code);
       });
 
-      */
       this.$$('.map-panel').style.height = '100%';
 
   },
@@ -124,7 +119,6 @@ Polymer({
   },
   loadMarksToMap: function(){
     var firebaseLogin  = this.$$('firebase-login');
-    var loginUser = firebaseLogin.user;
 
     var users = this.$$('freewater-users');
     var marksWithUsers = [];
@@ -141,8 +135,8 @@ Polymer({
         var user = users.getUser( mark.user );
         mark.user = user;
 
-        if (loginUser){
-          mark.gaveOpinion = !userDontHaveOpinion(mark, loginUser.id);
+        if (firebaseLogin && firebaseLogin.user){
+          mark.gaveOpinion = !userDontHaveOpinion(mark, firebaseLogin.user.id);
         }
 
         console.log('mark.gaveOpinion', mark.gaveOpinion);
@@ -153,6 +147,9 @@ Polymer({
     this.$$('smart-map').marks = marksWithUsers;
   },
   publish: function (data) {
+
+    this.marksdataSource.push(data);
+
     var self = this;
     var message = 'Yo have to login to publish a water point';
 
