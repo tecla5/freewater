@@ -1,0 +1,51 @@
+<html><head><link rel="import" href="../../bower_components/polymer/polymer.html">
+
+</head><body><dom-module id="fw-maps">
+
+
+
+  <template>
+    <style include="shared-styles"></style>
+
+    <style>
+      :host {
+        display: inline-block;
+        width: 100%;
+      }
+
+      .map-panel{
+        width: 100%;
+        height: 90%;
+      }
+
+      .progress-panel{
+        box-sizing: border-box;
+          -moz-box-sizing: border-box;
+          -webkit-box-sizing: border-box;
+
+        width: 100%;
+        height: 10%;
+        padding: 10px;
+      }
+
+      smart-map{
+        height: 100%;
+      }
+    </style>
+
+    
+
+    <div class="progress-panel" style="display:block">
+      <label>Cargando puntos de agua: </label>
+      <paper-progress indeterminate="true" style="margin-top:5px"></paper-progress>
+    </div>
+
+    <div class="map-panel">
+      <smart-map></smart-map>
+    </div>
+
+  </template>
+
+  <script src="fw-maps.js"></script>
+</dom-module>
+</body></html>
