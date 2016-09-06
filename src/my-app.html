@@ -24,6 +24,8 @@
 <link rel="import" href="my-icons.html">
 <link rel="import" href="fw-maps/fw-maps.html">
 <link rel="import" href="smart-map/smart-map.html">
+<link rel="import" href="fw-toolbar/fw-toolbar.html">
+<link rel="import" href="fw-login/fw-login.html">
 
 </head><body><dom-module id="my-app">
 
@@ -66,12 +68,19 @@
 
         font-weight: bold;
       }
+
+      .user-name{
+        font-size: 12px;
+      }
+      .user-picture{
+        width: 25px;
+        height: 25px;
+      }
+
+
     </style>
 
 
-    
-    <firebase-auth id="auth" user="{{user}}" provider="google" on-error="handleError">
-    </firebase-auth>
 
     <app-location route="{{route}}"></app-location>
     <app-route route="{{route}}" pattern="/:page" data="{{routeData}}" tail="{{subroute}}"></app-route>
@@ -81,9 +90,7 @@
       <app-drawer>
         <app-toolbar>Menu</app-toolbar>
         <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
-          <a name="view1" href="/view1">View One</a>
-          <a name="view2" href="/view2">View Two</a>
-          <a name="view3" href="/view3">View Three</a>
+          <a name="view1" href="/view1">Map</a>
         </iron-selector>
       </app-drawer>
 
@@ -93,14 +100,26 @@
         <app-header condenses="" reveals="" effects="waterfall">
           <app-toolbar>
             <paper-icon-button icon="menu" drawer-toggle=""></paper-icon-button>
-            <div main-title="">freewater</div>
+            <fw-toolbar signed-in="[[signedIn]]" on-sign-out="signOut">
+            </fw-toolbar>
+            <fw-login on-sign-in="signIn" signed-in="[[signedIn]]" disabled="[[!online]]">
+            </fw-login>
+            <firebase-auth id="auth" app-name="fw" provider="google" signed-in="{{signedIn}}" user="{{user}}" on-error="handleError">
+            </firebase-auth>
+
+
+            
+            <div class="user-panel" hidden$="[[!user]]">
+              <img src="[[user.photoURL]]" class="user-picture" style="float:left">
+              <span class="user-name" style="margin-left:10px">[[user.displayName]]</span>
+              
+            </div>
+
           </app-toolbar>
         </app-header>
 
         <iron-pages selected="[[page]]" attr-for-selected="name" fallback-selection="view404" role="main">
           <my-view1 name="view1"></my-view1>
-          <my-view2 name="view2"></my-view2>
-          <my-view3 name="view3"></my-view3>
           <my-view404 name="view404"></my-view404>
         </iron-pages>
 
@@ -109,6 +128,6 @@
     </app-drawer-layout>
   </template>
 
-  <script>Polymer({is:"my-app",properties:{page:{type:String,reflectToAttribute:!0,observer:"_pageChanged"}},observers:["_routePageChanged(routeData.page)"],_routePageChanged:function(e){this.page=e||"view1"},_pageChanged:function(e){var r=this.resolveUrl("my-"+e+".html");this.importHref(r,null,this._showPage404,!0)},_showPage404:function(){this.page="view404"},handleError:function(){console.log("firebase error")}});</script>
+  <script>Polymer({is:"my-app",properties:{page:{type:String,reflectToAttribute:!0,observer:"_pageChanged"}},observers:["_routePageChanged(routeData.page)"],_routePageChanged:function(e){this.page=e||"view1"},_pageChanged:function(e){if(console.log("page",e),e){var t=this.resolveUrl("my-"+e+".html");this.importHref(t,null,this._showPage404,!0)}},_showPage404:function(){this.page="view404"},handleError:function(){console.log("firebase error")},signIn:function(){this.$.auth.signInWithPopup().then(function(e){console.log("response",e)}).catch(function(e){})},signOut:function(){console.log("signOut"),this.$.auth&&this.$.auth.signOut()}});</script>
 </dom-module>
 </body></html>

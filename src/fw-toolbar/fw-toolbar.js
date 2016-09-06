@@ -1,0 +1,1 @@
+Polymer({is:"fw-toolbar",behaviors:[Polymer.AppNetworkStatusBehavior],properties:{signedIn:{type:Boolean,notify:!0,value:!1}},ready:function(){console.log("signedIn",this.signedIn,this.online)},computeLockIcon:function(o){return o?"lock-open":"lock"},lock:function(){console.log("lock"),this.fire("sign-out")}});
