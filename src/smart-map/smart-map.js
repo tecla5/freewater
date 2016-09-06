@@ -48,11 +48,27 @@ Polymer({
     'changeMark(marks, pos)',
     'currentPosChanged(searchResults)'
   ],
+
   ready: function(){
     console.log('smart-map ready');
     this.fire('map-ready');
+
     this.loadCurrentPos();
+    setTimeout(this.loadCurrentPos.bind(this), 10000);
   },
+
+  loadCurrentPos: function(){
+    if (navigator.geolocation) {
+        return navigator.geolocation.getCurrentPosition(
+                this.updateCurrentPosMarker.bind(this),
+                function(error){console.log('geolocation', error);},
+                {enableHighAccuracy:false});// TODO: option change to true
+    } else {
+      console.log('Geolocation is not supported.');
+      throw  'Geolocation is not supported.';
+    }
+  },
+
   currentPosChanged: function(searchResults){
     if (searchResults.length > 0){
       this.pos.name = searchResults[0].name;
@@ -93,19 +109,6 @@ Polymer({
 
     }
   },
-  loadCurrentPos: function(){
-    if (navigator.geolocation) {
-
-        setTimeout(this.loadCurrentPos.bind(this), 10000);
-        return navigator.geolocation.getCurrentPosition(
-                this.updateCurrentPosMarker.bind(this),
-                function(error){console.log(error);},
-                {enableHighAccuracy:true});
-    } else {
-      console.log('Geolocation is not supported.');
-      throw  'Geolocation is not supported.';
-    }
-  },
   updateCurrentPosMarker: function(location){
     console.log('your position', location);
 
@@ -121,7 +124,7 @@ Polymer({
     this.$.me.longitude = this.pos.lng;
     this.$.me.addEventListener('google-map-marker-open', this.publish.bind(this));
 
-    var googleSearch = this.$$('google-map-search');
+    var googleSearch = this.$.gmapsearch;
     googleSearch.query = this.pos.lat + ',' + this.pos.lng;
     googleSearch.search();
 
@@ -145,7 +148,8 @@ Polymer({
     }else if (e.target.alt === 'search closer'){
       this.markDirectionTo(this.sorted[ 0 ]);
     }else{
-      this.$$('google-map-directions').directionsRenderer.setMap(null);
+      console.log("settting map to null?");
+      //this.$$('google-map-directions').directionsRenderer.setMap(null);
     }
   },
   publish: function(){
@@ -164,7 +168,7 @@ Polymer({
     }
   },
   markDirectionTo: function(mark){
-    this.$$('google-map-directions').directionsRenderer.setMap(this.$$('google-map').map);
+    this.$$('google-map-directions').directionsRenderer.setMap(this.$.mymap.map);
 
     console.log('markDirectionTo');
     var start = this.pos.lat + ', '+ this.pos.lng;

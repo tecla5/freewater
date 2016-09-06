@@ -36,6 +36,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="my-icons.html">
 <link rel="import" href="fw-maps/fw-maps.html">
 <link rel="import" href="smart-map/smart-map.html">
+<link rel="import" href="fw-toolbar/fw-toolbar.html">
+<link rel="import" href="fw-login/fw-login.html">
 
 <dom-module id="my-app">
 
@@ -78,13 +80,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         font-weight: bold;
       }
+
+      .user-name{
+        font-size: 12px;
+      }
+      .user-picture{
+        width: 25px;
+        height: 25px;
+      }
+
+
     </style>
 
 
-    <!--
-  -->
-    <firebase-auth id="auth" user="{{user}}" provider="google" on-error="handleError">
-    </firebase-auth>
 
     <app-location route="{{route}}"></app-location>
     <app-route
@@ -108,7 +116,36 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <app-header condenses reveals effects="waterfall">
           <app-toolbar>
             <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
-            <div main-title>freewater</div>
+            <fw-toolbar
+                signed-in="[[signedIn]]"
+                on-sign-out="signOut">
+            </fw-toolbar>
+            <fw-login
+                on-sign-in="signIn"
+                signed-in="[[signedIn]]"
+                disabled="[[!online]]">
+            </fw-login>
+            <firebase-auth
+                id="auth"
+                app-name="fw"
+                provider="google"
+                signed-in="{{signedIn}}"
+                user="{{user}}"
+                on-error="handleError">
+            </firebase-auth>
+
+
+            <!-- logged User -->
+            <div class="user-panel" hidden$="[[!user]]">
+              <img src="[[user.photoURL]]" class="user-picture" style="float:left"></img>
+              <span class="user-name" style="margin-left:10px">[[user.displayName]]</span>
+              <!--
+              <tr><th>uid</th> <td>[[user.uid]]</td></tr>
+              <tr><th>email</th> <td>[[user.email]]</td></tr>
+              <tr><th>emailVerified</th> <td>[[user.emailVerified]]</td></tr>
+              -->
+            </div>
+
           </app-toolbar>
         </app-header>
 
@@ -148,8 +185,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       _pageChanged: function(page) {
         // Load page import on demand. Show 404 page if fails
-        var resolvedPageUrl = this.resolveUrl('my-' + page + '.html');
-        this.importHref(resolvedPageUrl, null, this._showPage404, true);
+        console.log('page', page);
+        if(page){
+          var resolvedPageUrl = this.resolveUrl('my-' + page + '.html');
+          this.importHref(resolvedPageUrl, null, this._showPage404, true);
+        }
       },
 
       _showPage404: function() {
@@ -158,6 +198,25 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       handleError: function() {
         console.log('firebase error');
+      }
+
+      ,
+      signIn: function() {
+        this.$.auth.signInWithPopup()
+          .then(function(response) {
+            console.log('response', response);
+            // successful authentication response here
+          })
+          .catch(function(error) {
+            // unsuccessful authentication response here
+          });
+      }
+      ,
+      signOut: function() {
+        console.log('signOut');
+        if (this.$.auth) {
+          this.$.auth.signOut();
+        }
       }
 
     });

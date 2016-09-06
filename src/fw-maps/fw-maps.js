@@ -118,8 +118,9 @@ Polymer({
     this.$$('.progress-panel').style.display = 'none';
   },
   loadMarksToMap: function(){
-    var firebaseLogin  = this.$$('firebase-login');
+    var firebaseLogin  = this.$$('fw-login');
 
+    // TODO: change
     var users = this.$$('freewater-users');
     var marksWithUsers = [];
 
