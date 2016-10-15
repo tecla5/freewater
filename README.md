@@ -28,8 +28,11 @@ The PRPL pattern, in a nutshell:
 ##### Prerequisites
 
 Install [polymer-cli](https://github.com/Polymer/polymer-cli):
-
+    npm install -g bower
     npm install -g polymer-cli
+
+### Build steps
+    bower install
 
 ### Start the development server
 

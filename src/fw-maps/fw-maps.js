@@ -32,7 +32,7 @@ Polymer({
 
   },
 
-  _transformToMarker(mark){
+  _transformToMarker: function(mark){
     return {
       //createdDate: moment(mark.createdDate).format('MMMM Do YYYY, h:mm:ss a'),
       name: mark.name,
