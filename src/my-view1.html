@@ -33,7 +33,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <!-- Main Content -->
     <div class="content" style="height:100%">
-        <fw-maps></fw-maps>
+        <fw-maps id="fwmaps" user={{user}} ></fw-maps>
     </div>
 
 
@@ -41,7 +41,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   <script>
     Polymer({
-      is: 'my-view1'
+      is: 'my-view1',
+      properties: {
+        user: { type: Object},
+      },
+      ready: function(){
+        console.info('ready-view', this.user);
+      }
+
     });
   </script>
 </dom-module>

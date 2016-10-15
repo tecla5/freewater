@@ -36,11 +36,16 @@ Install [polymer-cli](https://github.com/Polymer/polymer-cli):
 This command serves the app at `http://localhost:8080` and provides basic URL
 routing for the app:
 
+
     polymer serve --open
 
     firebase serve
 
 
+### tools
+
+    google-chrome https://console.firebase.google.com/project/free-water/overview --no-first-run --profile-directory=Tester
+                  https://console.firebase.google.com/project/free-water/database/data
 ### Build
 
 H2/push-compatible servers or to clients that do not support H2/Push.

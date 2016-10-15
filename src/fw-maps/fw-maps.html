@@ -33,22 +33,20 @@
       }
     </style>
 
-    <!--
     <firebase-query
         id="query"
         app-name="fw"
         path="/marks"
         data="{{marks}}">
     </firebase-query>
-    -->
 
     <div class="progress-panel" style='display:block;'>
       <label>Cargando puntos de agua: </label>
       <paper-progress indeterminate="true" style="margin-top:5px"></paper-progress>
     </div>
 
-    <div class="map-panel">
-      <smart-map></smart-map>
+    <div class="map-panel" >
+      <smart-map id="gmap" markers="{{markers}}" ></smart-map><!--  -->
     </div>
 
   </template>

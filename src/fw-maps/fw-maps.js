@@ -1,55 +1,16 @@
-function changeToArray(obj){
-  var array = [];
-
-  if (obj){
-    for(var propt in obj){
-      array.push(obj[propt]);
-    }
-  }
-
-  return array;
-}
-
-function search(array, element){
-  for (var i = 0; i < array.length; i++){
-    if (array[i] === element){
-      return array[i];
-    }
-  }
-
-  return null;
-}
-
-function  userDontHaveOpinion(mark, userId){
-  console.log('mark.confirms', mark.confirms);
-  console.log('mark.complaints', mark.complaints);
-  console.log('userId', userId);
-
-  var found = search(mark.confirms, userId);
-
-  if (!found){
-    found = search(mark.complaints, userId);
-  }
-
-  console.log('found', found);
-  return !found;
-}
 
 Polymer({
   is: 'fw-maps',
-  properties:{
-    usersReady: Boolean,
-    marks: {
-      type: Array,
-      observer: 'loadMarksToMap'
-    }
+  properties: {
+    user: { type: Object, observer: '_userChanged'},
+    marks: { type: Array, notify: true } // _marksChanged
   },
   observers: [
-    'loadMarksToMap(marks, usersReady)'
+    '_marksChanged(marks.splices)'
   ],
+
   ready: function(){
-    console.log('ready fw-map');
-    var self =  this;
+    //console.log('ready fw-map', this.marks);
 
     this.marksdataSource = firebase.app('fw').database().ref('marks');
 
@@ -64,19 +25,105 @@ Polymer({
       self.addOpinion('complaints', data);
     });
 
-    /*
-    this.$$('freewater-users').addEventListener('users-ready', function(){
-      self.usersReady = true;
-    });
-    */
   },
+
+  _userChanged: function(newData, oldData){
+    //console.log('userChanged', newData, oldData);
+
+  },
+
+  _transformToMarker(mark){
+    return {
+      //createdDate: moment(mark.createdDate).format('MMMM Do YYYY, h:mm:ss a'),
+      name: mark.name,
+      latitude: mark.lat,
+      longitude: mark.lng,
+      formattedAddress: mark.formattedAddress,
+      confirms: this.changeToArray(mark.confirms),
+      complaints: this.changeToArray(mark.complaints),
+    };
+  },
+
+  _marksChanged: function(newData, oldData){
+    console.log('marksChanged', newData, oldData);
+
+    //var firebaseLogin  = this.$$('fw-login');
+    //var optionUser = null;
+
+    var markers = [];
+
+
+
+    for (var i = 0; i < this.marks.length ; i++) {
+      var mark = this.marks[i];
+
+      var marker = this._transformToMarker( mark );
+      console.log(marker, mark);
+      // mark.__firebaseKey__ = propt;
+
+      //var user = users.getUser( mark.user );
+      //mark.user = user;
+
+      /*
+      if (firebaseLogin && firebaseLogin.user){
+        mark.gaveOpinion = !this.userDontHaveOpinion(mark, firebaseLogin.user.id);
+      }
+      */
+
+      //console.log('mark.gaveOpinion', mark.gaveOpinion);
+      markers.push( mark );
+
+    }
+
+    this.markers = markers;
+
+    //this.$$('smart-map').marks = this.marks;//WithUsers
+  },
+
+  changeToArray: function(obj){
+    var array = [];
+
+    if (obj){
+      for(var propt in obj){
+        array.push(obj[propt]);
+      }
+    }
+
+    return array;
+  },
+
+  search: function(array, element){
+    for (var i = 0; i < array.length; i++){
+      if (array[i] === element){
+        return array[i];
+      }
+    }
+
+    return null;
+  },
+
+  userDontHaveOpinion: function(mark, userId){
+    var found = this.search(mark.confirms, userId);
+
+    if (!found){
+      found = this.search(mark.complaints, userId);
+    }
+
+    console.log('found', found);
+    return !found;
+  },
+
+
+
+
+
   addOpinion: function (typeOpinion, data) {
     var message = 'Yo have to login to confirm or deny a water point';
 
     this.checkLogin(message).then(function(user){
         var mark = data.detail.mark;
 
-        if (userDontHaveOpinion(mark, user.id)){
+        if (this.userDontHaveOpinion(mark, user.id)){
           var marksdataSource = firebase.app('fw').database().ref('marks/'+ mark.__firebaseKey__ );
 
           var array = null;
@@ -94,6 +141,7 @@ Polymer({
         }
       });
   },
+
   loadMarks: function(customEvent){
 
     var country = customEvent.detail.country;
@@ -101,7 +149,7 @@ Polymer({
     var self = this;
 
     this.marksdataSource.orderByChild('country').equalTo(country).on('value', function(snapshot) {
-      self.marks = snapshot.val();
+      //self.marks = snapshot.val();
 
         if (self.$$('.progress-panel').style.display === 'block'){
           self.hideProgressbar();
@@ -114,39 +162,11 @@ Polymer({
       this.$$('.map-panel').style.height = '100%';
 
   },
+
   hideProgressbar: function(){
     this.$$('.progress-panel').style.display = 'none';
   },
-  loadMarksToMap: function(){
-    var firebaseLogin  = this.$$('fw-login');
 
-    // TODO: change
-    var users = this.$$('freewater-users');
-    var marksWithUsers = [];
-
-    for(var propt in this.marks){
-        var mark = this.marks[propt];
-        mark.__firebaseKey__ = propt;
-
-        mark.createdDate = moment(mark.createdDate)
-          .format('MMMM Do YYYY, h:mm:ss a');
-        mark.confirms = changeToArray(mark.confirms);
-        mark.complaints = changeToArray(mark.complaints);
-
-        var user = users.getUser( mark.user );
-        mark.user = user;
-
-        if (firebaseLogin && firebaseLogin.user){
-          mark.gaveOpinion = !userDontHaveOpinion(mark, firebaseLogin.user.id);
-        }
-
-        console.log('mark.gaveOpinion', mark.gaveOpinion);
-        marksWithUsers.push( this.marks[propt] );
-
-    }
-
-    this.$$('smart-map').marks = marksWithUsers;
-  },
   publish: function (data) {
 
     this.marksdataSource.push(data);

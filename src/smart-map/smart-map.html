@@ -1,6 +1,6 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 
-<dom-module id="smart-map">
+<dom-module id="smart-map" >
 
   <template>
     <style include="shared-styles"></style>
@@ -16,6 +16,7 @@
         bottom: 0;
         left: 0;
         height: 100%;
+        visibility: hidden;
       }
 
       iron-image.mini {
@@ -25,16 +26,16 @@
     </style>
 
     <!--
-    -->
     <google-map-search
         id="gmapsearch"
         map="[[map]]"
-        results="{{searchResults}}"
+        results="{{markers}}"
         type="address">
     </google-map-search>
+  -->
 
 
-    <google-map id="mymap" api-key='AIzaSyAR8Tg_vTvKnV-l7gEXL-TYIUDYjqHH6Xo' map="{{map}}">
+    <google-map id="mymap" api-key='AIzaSyAR8Tg_vTvKnV-l7gEXL-TYIUDYjqHH6Xo' map="{{map}}" zoom='17'>
       <template is="dom-if" if="{{closer}}">
         <paper-icon-button icon="maps:local-drink"
               alt="search closer"
@@ -42,15 +43,15 @@
         </paper-icon-button >
       </template>
 
-      <google-map-marker id="me" class='currentPos' clickEvents="true">
+      <google-map-marker id="gmm" class='currentPos' clickEvents="true">
         <template is="dom-if" if="{{veryCloser}}">
             This point is already marked
         </template>
       </google-map-marker>
 
-      <template is="dom-repeat" items="[[marks]]" as="marker">
-        <google-map-marker latitude="[[marker.lat]]"
-                  longitude="[[marker.lng]]"
+      <template is="dom-repeat" items="[[markers]]" as="marker">
+        <google-map-marker latitude="[[marker.latitude]]"
+                  longitude="[[marker.longitude]]"
                   id="[[marker.__firebaseKey__]]"
                   icon=[[marker.icon]]>
 
