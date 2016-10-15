@@ -66,7 +66,7 @@ Polymer({
 
   },
 
-  _findMarkers(location){
+  _findMarkers: function(location){
     this._searchInMap(location.coords.latitude, location.coords.longitude);
     //console.log(location, this.markers);
   },
