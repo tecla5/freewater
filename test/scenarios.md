@@ -18,8 +18,7 @@
 ## User Authentication
 
 **Feature:** User Authentication   
-**Background:**   
-&nbsp;&nbsp;&nbsp;**Given** the user has an account on Gmail or Facebook.  
+**Background:**Given** the user has an account on Gmail or Facebook.  
 
 **Scenario:**   suceess  
 **Given** the user login into free-water   
@@ -42,8 +41,7 @@
 ## User LogOut
 
 **Feature:** User Logout  
-**Background:**   
-&nbsp;&nbsp;&nbsp;**Given** the user has been login  
+**Background:**Given** the user has been login  
 **Scenario:**  
 **Given** the user have been login into free-water   
 **When** user click on menu
@@ -54,8 +52,7 @@
 ## Adding New fount
 
 **Feature:** Adding a New fount  
-**Background:**   
-&nbsp;&nbsp;&nbsp;**Given** the user has been login  
+**Background:**Given** the user has been login  
 
 **Scenario:** Success   
 **Given** the user click on locate icon  
@@ -77,8 +74,7 @@
 ## Search founts
 
 **Feature:** Search a fount
-**Background:**   
-&nbsp;&nbsp;&nbsp;**Given** the user NOT need to be logged
+**Background:**Given** the user NOT need to be logged
 
 **Scenario:** Success   
 **Given** the user had not logged   
@@ -98,22 +94,20 @@
 ## Information of Found detailed
 
 **Feature:** Detailed Information of one Spot.  
-**Background:**   
-&nbsp;&nbsp;&nbsp;**Given** the user NOT need to be logged
+**Background:**Given** the user NOT need to be logged
 
 **Scenario:** Success of Detailed information and ADD to favorites  
 **Given** the user had not logged   
 **When** user click on an spot icon  
 **Then** the app shows: Name Of street, km from current location, icon for add to favorite.  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**When** user click to favorite icon.  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**Them** the app shows login screen and a request to login first.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**Then** the app shows login screen and a request to login first.
 
 
 ## Delete a Fount
 
-**Feature:** Adding a New fount  
-**Background:**   
-&nbsp;&nbsp;&nbsp;**Given** the user has been login  
+**Feature:** DELETE a New fount  
+**Background:**Given** the user has been login  
 
 **Scenario:** Success   
 **Given** the user have been login  
@@ -157,8 +151,7 @@
 ## CHANGE views (satellite & map)
 
 **Feature:** change view to satelliteView/mapView
-**Background:**   
-**Given** the user not need to be looged  
+**Background:**Given** the user not need to be looged  
 **And** user click on satelliteview on menu
 
 **Scenario:** Success   
