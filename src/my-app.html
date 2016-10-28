@@ -92,6 +92,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     </style>
 
+    <div class="card">
+      <div class="circle">1</div>
+    </div>
 
 
     <app-location route="{{route}}"></app-location>
@@ -120,11 +123,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 signed-in="[[signedIn]]"
                 on-sign-out="signOut">
             </fw-toolbar>
+
             <fw-login
                 on-sign-in="signIn"
                 signed-in="[[signedIn]]"
                 disabled="[[!online]]">
             </fw-login>
+
             <firebase-auth
                 id="auth"
                 app-name="fw"
@@ -180,7 +185,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       ],
 
       ready: function () {
-        console.log('ready-app');
+      //console.debug('ready-app');
         //console.log(this.$$('firebase-auth'),this.$.auth);
         //console.log(this.$.view1);
       },
@@ -203,23 +208,25 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
 
       handleError: function() {
-        console.log('firebase error');
+      //console.debug('firebase error');
       }
 
       ,
       signIn: function() {
+        console.debug('signIn');
         this.$.auth.signInWithPopup()
-          .then(function(response) {
-            console.log('response', response);
-            // successful authentication response here
-          })
-          .catch(function(error) {
-            // unsuccessful authentication response here
-          });
+        .then(function(response) {
+          console.debug('response', response);
+          // successful authentication response here
+        })
+        .catch(function(error) {
+          console.log(error);
+          // unsuccessful authentication response here
+        });
       }
       ,
       signOut: function() {
-        console.log('signOut');
+        console.debug('signOut');
         if (this.$.auth) {
           this.$.auth.signOut();
         }

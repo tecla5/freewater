@@ -82,6 +82,7 @@ For Running the Test cases first start the serve:
       polymer serve
 
 and them open browser on (http://localhost:8080/test)
+or (http://localhost:8080/components/<my-el>/test/<my-el_test.html>)
 
 
 ### deploy test

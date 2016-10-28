@@ -14,7 +14,7 @@ Polymer({
   observers: [
     '_initMap(location)',
     '_findMarkers(location)',
-    'setMyCountry(markers)'
+    'setMyCountry(markers.splices)'
   ],
 
 
@@ -40,7 +40,7 @@ Polymer({
 
 
   _markersChanged: function(newData, oldData){
-    console.log('_markersChanged', newData, oldData);
+  //console.debug('_markersChanged', newData, oldData);
 
     this._addInfoMarkers(newData,this.location);
 
@@ -56,7 +56,7 @@ Polymer({
 
 
   _searchInMap: function(latitude, longitude) {
-    console.log('_searchInMap', latitude, longitude);
+  //console.debug('_searchInMap', latitude, longitude);
 
     if(this.$.gmapsearch){
       var googleSearch = this.$.gmapsearch;
@@ -73,7 +73,7 @@ Polymer({
 
 
   _updateLocation: function(location){
-    console.log('_updateLocation',location);
+  //console.debug('_updateLocation',location);
     this.location = location;
     var c = location.coords;
 
@@ -109,9 +109,9 @@ Polymer({
 
   setMyCountry: function(nearMarkers){
     // console.log('observer MyCountry(markers)',nearMarkers);
-    if (nearMarkers.length > 0){
+    if (nearMarkers && nearMarkers.length > 0){
       var nearMarker = nearMarkers[0].detail;
-      console.log(nearMarker);
+    //console.debug(nearMarker);
       this.pos = this.pos | {};
       this.pos.name = nearMarker.name;
       /*jshint camelcase: false */ /* option: add to .jshintrc file */
@@ -195,14 +195,15 @@ Polymer({
     }else if (e.target.alt === 'search closer'){
       this.markDirectionTo(this.sorted[ 0 ]);
     }else{
-      console.log("setting map to null?");
+    //console.debug("setting map to null?");
       this.$$('google-map-directions').directionsRenderer.setMap(null);
     }
   },
   publish: function(){
-    console.log('this.veryCloser', this.veryCloser);
+  //console.debug('this.veryCloser', this.veryCloser);
     if (!this.veryCloser){
-      this.fire('publish', {lat: this.pos.lat,
+      this.fire('publish', {
+        lat: this.pos.lat,
         lng: this.pos.lng,
         name: this.pos.name,
         formattedAddress: this.pos.formattedAddress,
@@ -217,12 +218,12 @@ Polymer({
   markDirectionTo: function(marker){
     this.$$('google-map-directions').directionsRenderer.setMap(this.$.mymap.map);
 
-    console.log('markDirectionTo');
+  //console.debug('markDirectionTo');
     var start = this.pos.lat + ', '+ this.pos.lng;
     var end = marker.lat + ', '+ marker.lng;
 
     this.direction = {start: start, end: end};
-    console.log('this.direction', JSON.stringify(this.direction));
+  //console.debug('this.direction', JSON.stringify(this.direction));
   },
   getIndex: function(target){
     var parent = target.parentElement.parentElement;
