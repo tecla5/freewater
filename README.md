@@ -65,15 +65,24 @@ in an unbundled state, as it would be served by a push-compatible server:
 This command serves the minified version of the app at `http://localhost:8080`
 generated using fragment bundling:
 
-    polymer serve build/bundled
+      polymer serve build/bundled
 
 ### Run tests
 
 This command will run
 [Web Component Tester](https://github.com/Polymer/web-component-tester) against the
-browsers currently installed on your machine.
+browsers currently installed on your machine:
 
-    polymer test
+      polymer test
+
+There is another way to the Test and see the Test interface
+[Test Interface](http://localhost:8080/test)
+For Running the Test cases first start the serve:
+
+      polymer serve
+
+and them open browser on (http://localhost:8080/test)
+or (http://localhost:8080/components/<my-el>/test/<my-el_test.html>)
 
 
 ### deploy test

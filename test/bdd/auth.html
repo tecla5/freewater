@@ -14,26 +14,23 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
 
-    <title>Tests</title>
+    <title>my-view1</title>
 
-    <script src="../bower_components/web-component-tester/browser.js"></script>
+    <script src="../../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="../../bower_components/web-component-tester/browser.js"></script>
+
+    <!-- Import the element to test -->
+    <link rel="import" href="../../src/my-app.html">
   </head>
   <body>
-    <script>
-      WCT.loadSuites([
-        //'tdd/my-view1.html?dom=shady',
-        //'tdd/my-view1.html?dom=shadow',
-        'tdd/smart-map.html?dom=shadow',
+    <test-fixture id="basic">
+      <template>
+        <my-app></my-app>
+      </template>
+    </test-fixture>
 
-        //'bdd/auth.html'
-        //'bdd/fount.js',
-        //'bdd/search.js',
-        //'bdd/spot.js',
-        //'bdd/delete.js',
-        //'bdd/modify.js'
-      ]);
+    <script src="auth.js" >
+
     </script>
-
-
   </body>
 </html>

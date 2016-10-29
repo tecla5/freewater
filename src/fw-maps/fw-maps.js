@@ -45,7 +45,7 @@ Polymer({
   },
 
   _marksChanged: function(newData, oldData){
-    console.log('marksChanged', newData, oldData);
+  //console.debug('marksChanged', newData, oldData);
 
     //var firebaseLogin  = this.$$('fw-login');
     //var optionUser = null;
@@ -58,7 +58,7 @@ Polymer({
       var mark = this.marks[i];
 
       var marker = this._transformToMarker( mark );
-      console.log(marker, mark);
+    //console.debug(marker, mark);
       // mark.__firebaseKey__ = propt;
 
       //var user = users.getUser( mark.user );
@@ -109,7 +109,7 @@ Polymer({
       found = this.search(mark.complaints, userId);
     }
 
-    console.log('found', found);
+  //console.debug('found', found);
     return !found;
   },
 
@@ -145,7 +145,7 @@ Polymer({
   loadMarks: function(customEvent){
 
     var country = customEvent.detail.country;
-    console.log('country', country);
+  //console.debug('country', country);
     var self = this;
 
     this.marksdataSource.orderByChild('country').equalTo(country).on('value', function(snapshot) {
@@ -156,7 +156,7 @@ Polymer({
         }
 
       }, function (errorObject) {
-        console.log('The read failed: ' + errorObject.code);
+      //console.debug('The read failed: ' + errorObject.code);
       });
 
       this.$$('.map-panel').style.height = '100%';
@@ -189,7 +189,7 @@ Polymer({
         if (!loginUser) {
           firebaseLogin.showLoginDialog().
             then(function(user){
-                console.log('User', user);
+              //console.debug('User', user);
                 resolve(user);
               },
               function(error){
@@ -203,7 +203,7 @@ Polymer({
   },
   publishByLoggedUser: function(data, user){
     var mark;
-    console.log('data.detail', data.detail);
+  //console.debug('data.detail', data.detail);
 
     if (data.detail){
       mark = data.detail;

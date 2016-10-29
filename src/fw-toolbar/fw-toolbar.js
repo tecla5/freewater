@@ -14,7 +14,7 @@ Polymer({
   },
 
   ready: function(){
-    console.log('signedIn', this.signedIn, this.online);
+  //console.debug('signedIn', this.signedIn, this.online);
   },
 
   computeLockIcon: function(signedIn) {
@@ -22,7 +22,7 @@ Polymer({
   },
 
   lock: function() {
-    console.log('lock');
+  //console.debug('lock');
     this.fire('sign-out');
   }
 
